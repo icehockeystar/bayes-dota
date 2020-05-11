@@ -45,4 +45,28 @@ public class RdbmsProtocol {
         @Column(name = "created_at", nullable = false)
         private Instant createdAt;
     }
+
+    @Data
+    @Entity
+    @Table(name = "bought_item")
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BoughtItemEntity {
+        @Id
+        @GeneratedValue
+        private long id;
+
+        @ManyToOne
+        @JoinColumn(name = "match_id", referencedColumnName = "id", nullable = false)
+        private MatchEntity match;
+
+        @Column(name = "bought_by_hero_name", nullable = false)
+        private String boughtByHeroName;
+
+        @Column(name = "item_name", nullable = false)
+        private String itemName;
+
+        @Column(name = "created_at", nullable = false)
+        private Instant createdAt;
+    }
 }

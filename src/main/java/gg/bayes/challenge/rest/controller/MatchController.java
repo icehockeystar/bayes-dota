@@ -5,6 +5,7 @@ import gg.bayes.challenge.rest.model.HeroItems;
 import gg.bayes.challenge.rest.model.HeroKills;
 import gg.bayes.challenge.rest.model.HeroSpells;
 import gg.bayes.challenge.service.MatchService;
+import gg.bayes.challenge.service.impl.BoughtItemService;
 import gg.bayes.challenge.service.impl.KillService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
@@ -23,11 +24,13 @@ public class MatchController {
 
     private final MatchService matchService;
     private final KillService killService;
+    private final BoughtItemService boughtItemService;
 
     @Autowired
-    public MatchController(MatchService matchService, KillService killService) {
+    public MatchController(MatchService matchService, KillService killService, BoughtItemService boughtItemService) {
         this.matchService = matchService;
         this.killService = killService;
+        this.boughtItemService = boughtItemService;
     }
 
     @PostMapping(consumes = "text/plain")
@@ -38,14 +41,25 @@ public class MatchController {
 
     @GetMapping("{matchId}")
     public ResponseEntity<List<HeroKills>> getMatch(@PathVariable("matchId") Long matchId) {
-        return ResponseEntity.ok(killService.fetchHeroKills(matchId));
+        List<HeroKills> heroKills = killService.fetchHeroKills(matchId);
+
+        if (heroKills.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(heroKills);
     }
 
     @GetMapping("{matchId}/{heroName}/items")
     public ResponseEntity<List<HeroItems>> getItems(@PathVariable("matchId") Long matchId,
                                                     @PathVariable("heroName") String heroName) {
-        // TODO use match service to retrieve stats
-        throw new NotImplementedException("should be implemented by the applicant");
+        List<HeroItems> heroItems = boughtItemService.fetchItems(matchId, heroName);
+
+        if (heroItems.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(heroItems);
     }
 
     @GetMapping("{matchId}/{heroName}/spells")

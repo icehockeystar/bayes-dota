@@ -14,11 +14,13 @@ public class MatchServiceImpl implements MatchService {
     private final TimestampParser timestampParser = new TimestampParser();
     private final RecordMatch recordMatch;
     private final KillService killService;
+    private final BoughtItemService boughtItemService;
 
     @Autowired
-    public MatchServiceImpl(RecordMatch recordMatch, KillService killService) {
+    public MatchServiceImpl(RecordMatch recordMatch, KillService killService, BoughtItemService boughtItemService) {
         this.recordMatch = recordMatch;
         this.killService = killService;
+        this.boughtItemService = boughtItemService;
     }
 
     @Override
@@ -33,6 +35,7 @@ public class MatchServiceImpl implements MatchService {
         try {
             long timestamp = parseTimestamp(line);
             killService.parseAndRecord(matchId, timestamp, line);
+            boughtItemService.parseAndRecord(matchId, timestamp, line);
         } catch (TimestampParserException e) {
             log.info("Ignoring line '{}'", line);
         }
