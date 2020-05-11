@@ -24,6 +24,6 @@ class KillServiceTest {
     void shouldParseAndRecordKill() {
         killService.parseAndRecord(MATCH_ID, TIMESTAMP, "[00:11:17.489] npc_dota_hero_snapfire is killed by npc_dota_hero_mars");
 
-        then(recordKill).should().accept(MATCH_ID, TIMESTAMP, "npc_dota_hero_snapfire", "npc_dota_hero_mars");
+        then(recordKill).should().accept(MATCH_ID, TIMESTAMP, "snapfire", "mars");
     }
 }
