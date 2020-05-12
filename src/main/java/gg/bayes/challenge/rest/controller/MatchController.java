@@ -6,6 +6,7 @@ import gg.bayes.challenge.rest.model.HeroKills;
 import gg.bayes.challenge.rest.model.HeroSpells;
 import gg.bayes.challenge.service.MatchService;
 import gg.bayes.challenge.service.impl.BoughtItemService;
+import gg.bayes.challenge.service.impl.CastSpellService;
 import gg.bayes.challenge.service.impl.KillService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,12 +26,15 @@ public class MatchController {
     private final MatchService matchService;
     private final KillService killService;
     private final BoughtItemService boughtItemService;
+    private final CastSpellService castSpellService;
 
     @Autowired
-    public MatchController(MatchService matchService, KillService killService, BoughtItemService boughtItemService) {
+    public MatchController(MatchService matchService, KillService killService, BoughtItemService boughtItemService,
+                           CastSpellService castSpellService) {
         this.matchService = matchService;
         this.killService = killService;
         this.boughtItemService = boughtItemService;
+        this.castSpellService = castSpellService;
     }
 
     @PostMapping(consumes = "text/plain")
@@ -65,8 +69,13 @@ public class MatchController {
     @GetMapping("{matchId}/{heroName}/spells")
     public ResponseEntity<List<HeroSpells>> getSpells(@PathVariable("matchId") Long matchId,
                                                       @PathVariable("heroName") String heroName) {
-        // TODO use match service to retrieve stats
-        throw new NotImplementedException("should be implemented by the applicant");
+        List<HeroSpells> heroSpells = castSpellService.fetchSpells(matchId, heroName);
+
+        if (heroSpells.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(heroSpells);
     }
 
     @GetMapping("{matchId}/{heroName}/damage")

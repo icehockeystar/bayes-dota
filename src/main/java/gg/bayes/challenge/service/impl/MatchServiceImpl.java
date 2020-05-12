@@ -15,12 +15,15 @@ public class MatchServiceImpl implements MatchService {
     private final RecordMatch recordMatch;
     private final KillService killService;
     private final BoughtItemService boughtItemService;
+    private final CastSpellService castSpellService;
 
     @Autowired
-    public MatchServiceImpl(RecordMatch recordMatch, KillService killService, BoughtItemService boughtItemService) {
+    public MatchServiceImpl(RecordMatch recordMatch, KillService killService, BoughtItemService boughtItemService,
+                            CastSpellService castSpellService) {
         this.recordMatch = recordMatch;
         this.killService = killService;
         this.boughtItemService = boughtItemService;
+        this.castSpellService = castSpellService;
     }
 
     @Override
@@ -36,6 +39,7 @@ public class MatchServiceImpl implements MatchService {
             long timestamp = parseTimestamp(line);
             killService.parseAndRecord(matchId, timestamp, line);
             boughtItemService.parseAndRecord(matchId, timestamp, line);
+            castSpellService.parseAndRecord(matchId, timestamp, line);
         } catch (TimestampParserException e) {
             log.info("Ignoring line '{}'", line);
         }

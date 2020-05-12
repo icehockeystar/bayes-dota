@@ -28,3 +28,13 @@ create table bought_item
     primary key(id),
     foreign key(match_id) references match(id)
 );
+
+create table cast_spell
+(
+    id bigint auto_increment,
+    match_id bigint not null,
+    cast_by_hero_name varchar(256) not null,
+    cast_name varchar(256) not null,
+    cast_level int not null,
+    created_at timestamp not null
+);

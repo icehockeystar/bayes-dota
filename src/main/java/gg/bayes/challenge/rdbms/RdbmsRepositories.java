@@ -1,6 +1,7 @@
 package gg.bayes.challenge.rdbms;
 
 import gg.bayes.challenge.rdbms.RdbmsProtocol.BoughtItemEntity;
+import gg.bayes.challenge.rdbms.RdbmsProtocol.CastSpellEntity;
 import gg.bayes.challenge.rdbms.RdbmsProtocol.KillEntity;
 import gg.bayes.challenge.rdbms.RdbmsProtocol.MatchEntity;
 import org.springframework.data.repository.CrudRepository;
@@ -21,5 +22,9 @@ class RdbmsRepositories {
     interface BoughtItemRepository extends CrudRepository<BoughtItemEntity, Long> {
 
         List<BoughtItemEntity> findAllByMatchIdAndBoughtByHeroName(Long matchId, String boughtByHeroName);
+    }
+
+    interface CastSpellRepository extends CrudRepository<CastSpellEntity, Long> {
+        List<CastSpellEntity> findAllByMatchIdAndCastByHeroName(Long matchId, String castByHeroName);
     }
 }

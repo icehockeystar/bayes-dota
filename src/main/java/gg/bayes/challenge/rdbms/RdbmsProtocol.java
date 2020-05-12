@@ -69,4 +69,31 @@ public class RdbmsProtocol {
         @Column(name = "created_at", nullable = false)
         private Instant createdAt;
     }
+
+    @Data
+    @Entity
+    @Table(name = "cast_spell")
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CastSpellEntity {
+        @Id
+        @GeneratedValue
+        private long id;
+
+        @ManyToOne
+        @JoinColumn(name = "match_id", referencedColumnName = "id", nullable = false)
+        private MatchEntity match;
+
+        @Column(name = "cast_by_hero_name", nullable = false)
+        private String castByHeroName;
+
+        @Column(name = "cast_name", nullable = false)
+        private String castName;
+
+        @Column(name = "cast_level", nullable = false)
+        private int castLevel;
+
+        @Column(name = "created_at", nullable = false)
+        private Instant createdAt;
+    }
 }
